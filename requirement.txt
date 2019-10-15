@@ -1,0 +1,9 @@
+1) Layout
+- Use Blue/dark skin
+- Use "Fixed" layout 
+
+2) User mangement
+- List af users (support ticket  GUI)
+- Create user
+- Edit user
+- Delete user

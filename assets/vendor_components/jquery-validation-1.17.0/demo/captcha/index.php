@@ -1,5 +1,4 @@
-<?php
-session_start();
+<?php session_start();
 // Make the page validate
 ini_set('session.use_trans_sid', '0');
 

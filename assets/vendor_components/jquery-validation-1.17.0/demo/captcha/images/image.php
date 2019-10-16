@@ -1,5 +1,4 @@
-<?php
-session_start();
+<?php session_start();
 
 // If the session is not present, set the variable to an error message
 if(!isset($_SESSION['captcha_id']))

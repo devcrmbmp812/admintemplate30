@@ -1,13 +1,13 @@
 <?php
-
+// Begin the session
+session_start();
 // Make the page validate
 ini_set('session.use_trans_sid', '0');
 
 // Include the random string file
 require 'rand.php';
 
-// Begin the session
-session_start();
+
 
 // Set the session contents
 $_SESSION['captcha_id'] = $str;

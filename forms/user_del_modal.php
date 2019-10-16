@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="delete_customer.php" method="POST">
+                <form action="" method="POST">
                     <!-- Modal content -->
                     <input type="hidden" name="del_id" id="del_id" value="<?php echo $row['id']; ?>">
                     <p>Are you sure you want to delete this row?</p>

@@ -4,32 +4,68 @@ require_once '../../config/config.php';
 // Costumers class
 require_once BASE_PATH . '/lib/Costumers/Costumers.php';
 $db = getDbInstance();
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    if(isset($_POST['add_user']) && $_POST['add_user'] == 'add_user') {
+        $data_to_db = array_filter($_POST);
+
+        unset($data_to_db['add_user']);
+
+        // Insert user and timestamp
+        $data_to_db['created_by'] = '1';
+        $data_to_db['created_date'] = date('Y-m-d');
+
+        $db = getDbInstance();
+        $last_id = $db->insert('tbl_users', $data_to_db);
+
+        if ($last_id)
+        {
+            $_SESSION['success'] = 'User added successfully!';
+        }
+        else
+        {
+            echo 'Insert failed: ' . $db->getLastError();
+            $_SESSION['failure'] = 'Insert Failed';
+        }
+    } else if(isset($_POST['edit_user']) && $_POST['edit_user'] == 'edit_user') {
+        // Get input data
+        $data_to_db = array_filter($_POST);
+        unset($data_to_db['edit_user']);
+        unset($data_to_db['edit_id']);
+
+        // Insert user and timestamp
+//        $data_to_db['updated_by'] = 1;
+//        $data_to_db['updated_at'] = date('Y-m-d');
+
+        $db = getDbInstance();
+        $db->where('id', $_POST['edit_id']);
+        $stat = $db->update('tbl_users', $data_to_db);
+
+        if ($stat)
+        {
+            $_SESSION['success'] = 'User updated successfully!';
+            // Redirect to the listing page
+//            header('Location: apps/users/app-users.php');
+//            // Important! Don't execute the rest put the exit/die.
+//            exit();
+        }
+    } else if(isset($_POST['del_id']) && $_POST['del_id'] != 0) {
+        $db->where('id', $_POST['del_id']);
+        $status = $db->delete('tbl_users');
+
+        if ($status)
+        {
+            $_SESSION['info'] = "User deleted successfully!";
+        }
+        else
+        {
+            $_SESSION['failure'] = "Unable to delete user";
+        }
+    }
+
+}
 $query = 'SELECT * FROM tbl_users;';
 $rows = $db->query($query);
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $data_to_db = array_filter($_POST);
-
-    // Insert user and timestamp
-    $data_to_db['created_by'] = $_SESSION['user_id'];
-    $data_to_db['created_at'] = date('Y-m-d H:i:s');
-
-    $db = getDbInstance();
-    $last_id = $db->insert('tbl_users', $data_to_db);
-
-    if ($last_id)
-    {
-        $_SESSION['success'] = 'Customer added successfully!';
-        // Redirect to the listing page
-        header('Location: apps/users/app-users.php');
-        // Important! Don't execute the rest put the exit/die.
-        exit();
-    }
-    else
-    {
-        echo 'Insert failed: ' . $db->getLastError();
-        exit();
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -200,8 +236,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                             <button type="button" class="btn btn-sm btn-danger-outline" data-target=".user-edit-<?php echo $row['id']; ?>" data-toggle="modal" data-original-title="Edit"><i class="ion-edit" aria-hidden="true"></i></button>
                                             <button type="button" class="btn btn-sm btn-danger-outline" data-target="#confirm-delete-<?php echo $row['id']; ?>" data-toggle="modal" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
                                         </td>
+                                        <?php include BASE_PATH . '/forms/user_del_modal.php';?>
+                                        <?php include BASE_PATH . '/forms/user_edit_modal.php'; ?>
                                     </tr>
-                                    <?php include_once BASE_PATH . '/forms/user_del_modal.php'?>
+
                                     <?php endforeach; ?>
                                     </tbody>
                                 </table>
@@ -212,7 +250,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             </div>
             <!-- /.row -->
             <?php include BASE_PATH . '/forms/user_add_modal.php'; ?>
-            <?php include BASE_PATH . '/forms/user_edit_modal.php'; ?>
         </section>
         <!-- /.content -->
     </div>

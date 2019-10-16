@@ -6,7 +6,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <form action="/apps/users/app_users.php" method="POST">
+                <form action="" method="POST">
+                    <input type="hidden" name="add_user" value="add_user">
                     <div class="box-body">
                         <div class="form-group">
                             <label for="example_input_first_name">First Name:</label>

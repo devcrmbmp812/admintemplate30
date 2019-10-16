@@ -22,7 +22,7 @@ $(function () {
 
 		
 // donut chart
-		$('.donut').peity('donut');
+// 		$('.donut').peity('donut');
 
 // world-map
 jQuery('#world-map-markers').vectorMap(

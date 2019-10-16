@@ -7,31 +7,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="<?php echo BASE_URL;?>/images/favicon.ico">
+    <link rel="icon" href="<?php echo BASE_URL;?>images/favicon.ico">
 
     <title>Fab Admin - Dashboard</title>
 
     <!-- Bootstrap 4.0-->
-    <link rel="stylesheet" href="<?php echo BASE_URL;?>/assets/vendor_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL;?>assets/vendor_components/bootstrap/dist/css/bootstrap.css">
 
     <!-- Morris charts -->
-    <link rel="stylesheet" href="<?php echo BASE_URL;?>/assets/vendor_components/morris.js/morris.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL;?>assets/vendor_components/morris.js/morris.css">
 
     <!-- Bootstrap switch-->
-    <link rel="stylesheet" href="<?php echo BASE_URL;?>/assets/vendor_components/bootstrap-switch/switch.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL;?>assets/vendor_components/bootstrap-switch/switch.css">
 
     <!-- fullCalendar -->
-    <link rel="stylesheet" href="<?php echo BASE_URL;?>/assets/vendor_components/fullcalendar/fullcalendar.min.css">
-    <link rel="stylesheet" href="<?php echo BASE_URL;?>/assets/vendor_components/fullcalendar/fullcalendar.print.min.css" media="print">
+    <link rel="stylesheet" href="<?php echo BASE_URL;?>assets/vendor_components/fullcalendar/fullcalendar.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL;?>assets/vendor_components/fullcalendar/fullcalendar.print.min.css" media="print">
 
     <!-- Bootstrap extend-->
-    <link rel="stylesheet" href="<?php echo BASE_URL;?>/css/bootstrap-extend.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL;?>css/bootstrap-extend.css">
 
     <!-- theme style -->
-    <link rel="stylesheet" href="<?php echo BASE_URL;?>/css/master_style.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL;?>css/master_style.css">
 
     <!-- Fab Admin skins -->
-    <link rel="stylesheet" href="<?php echo BASE_URL;?>/css/skins/_all-skins.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL;?>css/skins/_all-skins.css">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -49,16 +49,16 @@
 
     <header class="main-header">
         <!-- Logo -->
-        <a href="<?php echo BASE_URL;?>/index.php" class="logo">
+        <a href="<?php echo BASE_URL;?>index.php" class="logo">
             <!-- mini logo -->
             <b class="logo-mini">
-                <span class="light-logo"><img src="<?php echo BASE_URL;?>/images/logo-light.png" alt="logo"></span>
-                <span class="dark-logo"><img src="<?php echo BASE_URL;?>/images/logo-dark.png" alt="logo"></span>
+                <span class="light-logo"><img src="<?php echo BASE_URL;?>images/logo-light.png" alt="logo"></span>
+                <span class="dark-logo"><img src="<?php echo BASE_URL;?>images/logo-dark.png" alt="logo"></span>
             </b>
             <!-- logo-->
             <span class="logo-lg">
-          <img src="<?php echo BASE_URL;?>/images/logo-light-text.png" alt="logo" class="light-logo">
-          <img src="<?php echo BASE_URL;?>/images/logo-dark-text.png" alt="logo" class="dark-logo">
+          <img src="<?php echo BASE_URL;?>images/logo-light-text.png" alt="logo" class="light-logo">
+          <img src="<?php echo BASE_URL;?>images/logo-dark-text.png" alt="logo" class="dark-logo">
         </span>
         </a>
         <!-- Header Navbar -->
@@ -80,8 +80,8 @@
             <!-- sidebar menu-->
             <ul class="sidebar-menu" data-widget="tree">
                 <li class="user-profile treeview">
-                    <a href="href="<?php echo BASE_URL;?>/index.php"">
-                        <img src="<?php echo BASE_URL;?>/images/user5-128x128.jpg" alt="user">
+                    <a href="href="<?php echo BASE_URL;?>index.php"">
+                        <img src="<?php echo BASE_URL;?>images/user5-128x128.jpg" alt="user">
                         <span>Juliya Brus</span>
                         <span class="pull-right-container">
                 <i class="fa fa-angle-right pull-right"></i>
@@ -97,7 +97,7 @@
                 </li>
                 <li class="header nav-small-cap">PERSONAL</li>
                 <li class="active">
-                    <a href="<?php echo BASE_URL;?>/index.php">
+                    <a href="<?php echo BASE_URL;?>index.php">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                         <span class="pull-right-container">
                 <i class="fa fa-angle-right pull-right"></i>
@@ -113,7 +113,7 @@
               </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="<?php echo BASE_URL;?>/apps/users/app-users.php"><i class="fa fa-circle-thin"></i>Users</a></li>
+                        <li><a href="<?php echo BASE_URL;?>apps/users/app-users.php"><i class="fa fa-circle-thin"></i>Users</a></li>
                     </ul>
                 </li>
             </ul>

@@ -165,7 +165,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         <div class="box-header with-border">
                             <h4 class="box-title">Users List</h4>
                             <div class="page-action-links text-right">
-                                <a data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Add new</a>
+                                <a data-toggle="modal" data-target=".user-add-modal" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Add new</a>
                             </div>
                         </div>
                         <div class="col-lg-12">
@@ -197,35 +197,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                         <td><?php echo htmlspecialchars($row['created_by']); ?></td>
                                         <td><?php echo htmlspecialchars($row['created_date']); ?></td>
                                         <td>
+                                            <button type="button" class="btn btn-sm btn-danger-outline" data-target=".user-edit-<?php echo $row['id']; ?>" data-toggle="modal" data-original-title="Edit"><i class="ion-edit" aria-hidden="true"></i></button>
                                             <button type="button" class="btn btn-sm btn-danger-outline" data-target="#confirm-delete-<?php echo $row['id']; ?>" data-toggle="modal" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
                                         </td>
                                     </tr>
-                                    <!-- Delete Confirmation Modal -->
-                                    <div class="modal center-modal fade" id="confirm-delete-<?php echo $row['id']; ?>" tabindex="-1">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">Confirm</h5>
-                                                    <button type="button" class="close" data-dismiss="modal">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="delete_customer.php" method="POST">
-                                                        <!-- Modal content -->
-                                                        <input type="hidden" name="del_id" id="del_id" value="<?php echo $row['id']; ?>">
-                                                        <p>Are you sure you want to delete this row?</p>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer modal-footer-uniform">
-                                                    <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">No</button>
-                                                    <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">Yes</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- //Delete Confirmation Modal -->
-
+                                    <?php include_once BASE_PATH . '/forms/user_del_modal.php'?>
                                     <?php endforeach; ?>
                                     </tbody>
                                 </table>
@@ -235,52 +211,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 </div>
             </div>
             <!-- /.row -->
-
-            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myLargeModalLabel">Add New User</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="/apps/users/app_users.php" method="POST">
-                                <div class="box-body">
-                                    <div class="form-group">
-                                        <label for="example_input_first_name">First Name:</label>
-                                        <input type="text" name="first_name" class="form-control" placeholder="Enter first name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="example_input_last_name">Last Name:</label>
-                                        <input type="text" name="last_name" class="form-control" placeholder="Enter last name">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Email address:</label>
-                                        <input type="email" name="user_email" class="form-control" placeholder="Enter email">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Phone No:</label>
-                                        <input type="tel" name="phone_no" class="form-control" placeholder="Phone number">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Note:</label>
-                                        <input type="text" name="note" class="form-control" placeholder="Note">
-                                    </div>
-                                </div>
-                                <!-- /.box-body -->
-                                <div class="box-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-success pull-right">Submit</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
+            <?php include BASE_PATH . '/forms/user_add_modal.php'; ?>
+            <?php include BASE_PATH . '/forms/user_edit_modal.php'; ?>
         </section>
         <!-- /.content -->
     </div>

@@ -1,3 +1,36 @@
+<?php
+session_start();
+require_once '../../config/config.php';
+// Costumers class
+require_once BASE_PATH . '/lib/Costumers/Costumers.php';
+$db = getDbInstance();
+$query = 'SELECT * FROM tbl_users;';
+$rows = $db->query($query);
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $data_to_db = array_filter($_POST);
+
+    // Insert user and timestamp
+    $data_to_db['created_by'] = $_SESSION['user_id'];
+    $data_to_db['created_at'] = date('Y-m-d H:i:s');
+
+    $db = getDbInstance();
+    $last_id = $db->insert('tbl_users', $data_to_db);
+
+    if ($last_id)
+    {
+        $_SESSION['success'] = 'Customer added successfully!';
+        // Redirect to the listing page
+        header('Location: apps/users/app-users.php');
+        // Important! Don't execute the rest put the exit/die.
+        exit();
+    }
+    else
+    {
+        echo 'Insert failed: ' . $db->getLastError();
+        exit();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -125,12 +158,18 @@
 
         <!-- Main content -->
         <section class="content">
-
+            <?php include BASE_PATH . '/includes/flash_messages.php'; ?>
             <div class="row">
                 <div class="col-12">
                     <div class="box">
                         <div class="box-header with-border">
                             <h4 class="box-title">Users List</h4>
+                            <div class="page-action-links text-right">
+                                <a data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> Add new</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+
                         </div>
                         <div class="box-body">
                             <div class="table-responsive">
@@ -148,286 +187,46 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    <?php foreach ($rows as $row): ?>
                                     <tr>
-                                        <td>1011</td>
+                                        <td><?php echo htmlspecialchars($row['first_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['last_name']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['user_email']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['phone_no']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['note']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['created_by']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['created_date']); ?></td>
                                         <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/1.jpg" alt="user" class="avatar avatar-sm mr-5" /> Sophia</a>
-                                        </td>
-                                        <td>sophia@gmail.com</td>
-                                        <td>How to customize the template?</td>
-                                        <td><span class="label label-warning">New</span> </td>
-                                        <td>Elijah</td>
-                                        <td>14-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger-outline" data-target="#confirm-delete-<?php echo $row['id']; ?>" data-toggle="modal" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>1224</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/2.jpg" alt="user" class="avatar avatar-sm mr-5" /> William</a>
-                                        </td>
-                                        <td>william@gmail.com</td>
-                                        <td>How to change colors</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Benjamin</td>
-                                        <td>13-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1024</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/3.jpg" alt="user" class="avatar avatar-sm mr-5" /> Jayden</a>
-                                        </td>
-                                        <td>jayden@gmail.com</td>
-                                        <td>How to set Horizontal nav</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Andrew</td>
-                                        <td>13-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2124</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/4.jpg" alt="user" class="avatar avatar-sm mr-5" /> Ethan</a>
-                                        </td>
-                                        <td>ethan@gmail.com</td>
-                                        <td>How this will connect with ethan</td>
-                                        <td><span class="label label-inverse">Pending</span> </td>
-                                        <td>Andrew</td>
-                                        <td>12-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3124</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/5.jpg" alt="user" class="avatar avatar-sm mr-5" /> Noah</a>
-                                        </td>
-                                        <td>noah@gmail.com</td>
-                                        <td>How to set navigation</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Andrew</td>
-                                        <td>12-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1611</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/6.jpg" alt="user" class="avatar avatar-sm mr-5" /> Sophia</a>
-                                        </td>
-                                        <td>sophia@gmail.com</td>
-                                        <td>How to customize the template?</td>
-                                        <td><span class="label label-warning">New</span> </td>
-                                        <td>Elijah</td>
-                                        <td>14-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4224</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/7.jpg" alt="user" class="avatar avatar-sm mr-5" /> William</a>
-                                        </td>
-                                        <td>william@gmail.com</td>
-                                        <td>How to change colors</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Benjamin</td>
-                                        <td>13-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2524</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/8.jpg" alt="user" class="avatar avatar-sm mr-5" /> Jayden</a>
-                                        </td>
-                                        <td>jayden@gmail.com</td>
-                                        <td>How to set Horizontal nav</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Andrew</td>
-                                        <td>13-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>7524</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/9.jpg" alt="user" class="avatar avatar-sm mr-5" /> Ethan</a>
-                                        </td>
-                                        <td>ethan@gmail.com</td>
-                                        <td>How this will connect with ethan</td>
-                                        <td><span class="label label-inverse">Pending</span> </td>
-                                        <td>Andrew</td>
-                                        <td>12-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4124</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/2.jpg" alt="user" class="avatar avatar-sm mr-5" /> Noah</a>
-                                        </td>
-                                        <td>noah@gmail.com</td>
-                                        <td>How to set navigation</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Andrew</td>
-                                        <td>12-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1011</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/1.jpg" alt="user" class="avatar avatar-sm mr-5" /> Mia</a>
-                                        </td>
-                                        <td>sophia@gmail.com</td>
-                                        <td>How to customize the template?</td>
-                                        <td><span class="label label-warning">New</span> </td>
-                                        <td>Elijah</td>
-                                        <td>14-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1224</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/3.jpg" alt="user" class="avatar avatar-sm mr-5" />Chloe</a>
-                                        </td>
-                                        <td>william@gmail.com</td>
-                                        <td>How to change colors</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Benjamin</td>
-                                        <td>13-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>8024</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/4.jpg" alt="user" class="avatar avatar-sm mr-5" /> Chloe</a>
-                                        </td>
-                                        <td>jayden@gmail.com</td>
-                                        <td>How to set Horizontal nav</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Andrew</td>
-                                        <td>13-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>5124</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/5.jpg" alt="user" class="avatar avatar-sm mr-5" /> Ethan</a>
-                                        </td>
-                                        <td>ethan@gmail.com</td>
-                                        <td>How this will connect with ethan</td>
-                                        <td><span class="label label-inverse">Pending</span> </td>
-                                        <td>Andrew</td>
-                                        <td>12-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3144</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/6.jpg" alt="user" class="avatar avatar-sm mr-5" /> Noah</a>
-                                        </td>
-                                        <td>noah@gmail.com</td>
-                                        <td>How to set navigation</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Andrew</td>
-                                        <td>12-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1621</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/7.jpg" alt="user" class="avatar avatar-sm mr-5" /> Sophia</a>
-                                        </td>
-                                        <td>sophia@gmail.com</td>
-                                        <td>How to customize the template?</td>
-                                        <td><span class="label label-warning">New</span> </td>
-                                        <td>Elijah</td>
-                                        <td>14-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4724</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/8.jpg" alt="user" class="avatar avatar-sm mr-5" /> William</a>
-                                        </td>
-                                        <td>william@gmail.com</td>
-                                        <td>How to change colors</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Benjamin</td>
-                                        <td>13-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2594</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/9.jpg" alt="user" class="avatar avatar-sm mr-5" /> Jayden</a>
-                                        </td>
-                                        <td>jayden@gmail.com</td>
-                                        <td>How to set Horizontal nav</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Andrew</td>
-                                        <td>13-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>7524</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/1.jpg" alt="user" class="avatar avatar-sm mr-5" /> Ethan</a>
-                                        </td>
-                                        <td>ethan@gmail.com</td>
-                                        <td>How this will connect with ethan</td>
-                                        <td><span class="label label-inverse">Pending</span> </td>
-                                        <td>Andrew</td>
-                                        <td>12-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4124</td>
-                                        <td>
-                                            <a href="javascript:void(0)"><img src="../../images/avatar/4.jpg" alt="user" class="avatar avatar-sm mr-5" /> Noah</a>
-                                        </td>
-                                        <td>noah@gmail.com</td>
-                                        <td>How to set navigation</td>
-                                        <td><span class="label label-success">Complete</span> </td>
-                                        <td>Andrew</td>
-                                        <td>12-10-2017</td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-toggle="tooltip" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
-                                        </td>
-                                    </tr>
+                                    <!-- Delete Confirmation Modal -->
+                                    <div class="modal center-modal fade" id="confirm-delete-<?php echo $row['id']; ?>" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Confirm</h5>
+                                                    <button type="button" class="close" data-dismiss="modal">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="delete_customer.php" method="POST">
+                                                        <!-- Modal content -->
+                                                        <input type="hidden" name="del_id" id="del_id" value="<?php echo $row['id']; ?>">
+                                                        <p>Are you sure you want to delete this row?</p>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer modal-footer-uniform">
+                                                    <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">No</button>
+                                                    <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">Yes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- //Delete Confirmation Modal -->
+
+                                    <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -437,6 +236,51 @@
             </div>
             <!-- /.row -->
 
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myLargeModalLabel">Add New User</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/apps/users/app_users.php" method="POST">
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label for="example_input_first_name">First Name:</label>
+                                        <input type="text" name="first_name" class="form-control" placeholder="Enter first name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="example_input_last_name">Last Name:</label>
+                                        <input type="text" name="last_name" class="form-control" placeholder="Enter last name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email address:</label>
+                                        <input type="email" name="user_email" class="form-control" placeholder="Enter email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Phone No:</label>
+                                        <input type="tel" name="phone_no" class="form-control" placeholder="Phone number">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Note:</label>
+                                        <input type="text" name="note" class="form-control" placeholder="Note">
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                                <div class="box-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-success pull-right">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
         </section>
         <!-- /.content -->
     </div>
@@ -445,189 +289,7 @@
 <footer class="main-footer">
     &copy; 2019 All Rights Reserved.
 </footer>
-<!-- Control Sidebar -->
-<aside class="control-sidebar control-sidebar-light">
-    <!-- Create the tabs -->
-    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-        <li class="nav-item"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-        <li class="nav-item"><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-cog fa-spin"></i></a></li>
-    </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <!-- Home tab content -->
-        <div class="tab-pane" id="control-sidebar-home-tab">
-            <h3 class="control-sidebar-heading">Recent Activity</h3>
-            <ul class="control-sidebar-menu">
-                <li>
-                    <a href="javascript:void(0)">
-                        <i class="menu-icon fa fa-birthday-cake bg-danger"></i>
 
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">Admin Birthday</h4>
-
-                            <p>Will be July 24th</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <i class="menu-icon fa fa-user bg-warning"></i>
-
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">Jhone Updated His Profile</h4>
-
-                            <p>New Email : jhone_doe@demo.com</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <i class="menu-icon fa fa-envelope-o bg-info"></i>
-
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">Disha Joined Mailing List</h4>
-
-                            <p>disha@demo.com</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <i class="menu-icon fa fa-file-code-o bg-success"></i>
-
-                        <div class="menu-info">
-                            <h4 class="control-sidebar-subheading">Code Change</h4>
-
-                            <p>Execution time 15 Days</p>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <!-- /.control-sidebar-menu -->
-
-            <h3 class="control-sidebar-heading">Tasks Progress</h3>
-            <ul class="control-sidebar-menu">
-                <li>
-                    <a href="javascript:void(0)">
-                        <h4 class="control-sidebar-subheading">
-                            Web Design
-                            <span class="label label-danger pull-right">40%</span>
-                        </h4>
-
-                        <div class="progress progress-xxs">
-                            <div class="progress-bar progress-bar-danger" style="width: 40%"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <h4 class="control-sidebar-subheading">
-                            Update Data
-                            <span class="label label-success pull-right">75%</span>
-                        </h4>
-
-                        <div class="progress progress-xxs">
-                            <div class="progress-bar progress-bar-success" style="width: 75%"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <h4 class="control-sidebar-subheading">
-                            Order Process
-                            <span class="label label-warning pull-right">89%</span>
-                        </h4>
-
-                        <div class="progress progress-xxs">
-                            <div class="progress-bar progress-bar-warning" style="width: 89%"></div>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript:void(0)">
-                        <h4 class="control-sidebar-subheading">
-                            Development
-                            <span class="label label-primary pull-right">72%</span>
-                        </h4>
-
-                        <div class="progress progress-xxs">
-                            <div class="progress-bar progress-bar-primary" style="width: 72%"></div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <!-- /.control-sidebar-menu -->
-
-        </div>
-        <!-- /.tab-pane -->
-        <!-- Stats tab content -->
-        <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-        <!-- /.tab-pane -->
-        <!-- Settings tab content -->
-        <div class="tab-pane" id="control-sidebar-settings-tab">
-            <form method="post">
-                <h3 class="control-sidebar-heading">General Settings</h3>
-
-                <div class="form-group">
-                    <input type="checkbox" id="report_panel" class="chk-col-grey" >
-                    <label for="report_panel" class="control-sidebar-subheading ">Report panel usage</label>
-
-                    <p>
-                        general settings information
-                    </p>
-                </div>
-                <!-- /.form-group -->
-
-                <div class="form-group">
-                    <input type="checkbox" id="allow_mail" class="chk-col-grey" >
-                    <label for="allow_mail" class="control-sidebar-subheading ">Mail redirect</label>
-
-                    <p>
-                        Other sets of options are available
-                    </p>
-                </div>
-                <!-- /.form-group -->
-
-                <div class="form-group">
-                    <input type="checkbox" id="expose_author" class="chk-col-grey" >
-                    <label for="expose_author" class="control-sidebar-subheading ">Expose author name</label>
-
-                    <p>
-                        Allow the user to show his name in blog posts
-                    </p>
-                </div>
-                <!-- /.form-group -->
-
-                <h3 class="control-sidebar-heading">Chat Settings</h3>
-
-                <div class="form-group">
-                    <input type="checkbox" id="show_me_online" class="chk-col-grey" >
-                    <label for="show_me_online" class="control-sidebar-subheading ">Show me as online</label>
-                </div>
-                <!-- /.form-group -->
-
-                <div class="form-group">
-                    <input type="checkbox" id="off_notifications" class="chk-col-grey" >
-                    <label for="off_notifications" class="control-sidebar-subheading ">Turn off notifications</label>
-                </div>
-                <!-- /.form-group -->
-
-                <div class="form-group">
-                    <label class="control-sidebar-subheading">
-                        <a href="javascript:void(0)" class="text-red margin-r-5"><i class="fa fa-trash-o"></i></a>
-                        Delete chat history
-                    </label>
-                </div>
-                <!-- /.form-group -->
-            </form>
-        </div>
-        <!-- /.tab-pane -->
-    </div>
-</aside>
-<!-- /.control-sidebar -->
-
-<!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
-<div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
 
@@ -651,7 +313,7 @@
 
 <!-- Fab Admin App -->
 <script src="../../js/template.js"></script>
-
+<!---->
 <!-- Fab Admin for demo purposes -->
 <script src="../../js/demo.js"></script>
 

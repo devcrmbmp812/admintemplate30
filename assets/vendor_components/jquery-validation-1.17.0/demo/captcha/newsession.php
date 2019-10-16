@@ -1,5 +1,4 @@
 <?php
-// Begin a new session
 session_start();
 // Include the random string file
 require 'rand.php';

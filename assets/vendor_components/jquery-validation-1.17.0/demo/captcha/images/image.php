@@ -1,6 +1,4 @@
 <?php
-
-// Begin the session
 session_start();
 
 // If the session is not present, set the variable to an error message

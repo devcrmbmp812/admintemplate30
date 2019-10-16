@@ -3,8 +3,13 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 define('BASE_PATH', dirname(dirname(__FILE__)));
-define('BASE_URL', 'http://developer.zenplan.dk/');
-//define('BASE_URL', 'http://dev.phptemplate30.com:8081/');
+
+if($_SERVER['HTTP_HOST'] == 'dev.phptemplate30.com:8081') {// local
+    define('BASE_URL', 'http://dev.phptemplate30.com:8081/');
+} else if($_SERVER['HTTP_HOST'] == 'developer.zenplan.dk') {// online
+    define('BASE_URL', 'http://developer.zenplan.dk/');
+}
+
 define('APP_FOLDER', 'simpleadmin');
 define('CURRENT_PAGE', basename($_SERVER['REQUEST_URI']));
 

@@ -1,4 +1,8 @@
-﻿<?php session_start();
+﻿<?php
+if(!isset($_SESSION))
+{
+    session_start();
+}
 require_once './config/config.php';
 
 //Get DB instance. function is defined in config.php

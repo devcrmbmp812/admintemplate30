@@ -1,4 +1,6 @@
 <?php
+@ob_start();
+session_start();
 require_once '../../config/config.php';
 
 //Get DB instance. function is defined in config.php

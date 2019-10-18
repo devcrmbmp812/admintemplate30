@@ -2,7 +2,7 @@
 //Note: This file should be included first in every php page.
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
-define('BASE_PATH', dirname(dirname(__FILE__)));
+define('BASE_PATH', dirname(__FILE__));
 
 if($_SERVER['HTTP_HOST'] == 'dev.phptemplate30.com:8081') {// local
     define('BASE_URL', 'http://dev.phptemplate30.com:8081/');
@@ -21,8 +21,8 @@ if($_SERVER['HTTP_HOST'] == 'dev.phptemplate30.com:8081') {// local
 define('APP_FOLDER', 'simpleadmin');
 define('CURRENT_PAGE', basename($_SERVER['REQUEST_URI']));
 
-require_once BASE_PATH . '/lib/MysqliDb/MysqliDb.php';
-require_once BASE_PATH . '/helpers/helpers.php';
+require_once BASE_PATH . '/apps/users/lib/MysqliDb/MysqliDb.php';
+require_once BASE_PATH . '/apps/users/helpers/helpers.php';
 
 /*
 |--------------------------------------------------------------------------

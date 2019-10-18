@@ -1,8 +1,7 @@
 <?php
 session_start();
-require_once '../../config/config.php';
+require_once '../../dbconfig.php';
 // Costumers class
-require_once BASE_PATH . '/lib/Costumers/Costumers.php';
 $db = getDbInstance();
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -12,7 +11,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         unset($data_to_db['add_user']);
 
         // Insert user and timestamp
-        $data_to_db['created_by'] = '1';
+        $data_to_db['created_by'] = $_SESSION['user_id'];
+        $data_to_db['password'] = password_hash($data_to_db['password'], PASSWORD_DEFAULT);
         $data_to_db['created_date'] = date('Y-m-d');
 
         $db = getDbInstance();
@@ -66,6 +66,22 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 }
 $query = 'SELECT * FROM tbl_users;';
 $rows = $db->query($query);
+$result_rows = array();
+foreach ($rows as $key=>$row) {
+    $result_rows[$key]['id'] = $row['id'];
+    $result_rows[$key]['first_name'] = $row['first_name'];
+    $result_rows[$key]['last_name'] = $row['last_name'];
+    $result_rows[$key]['user_email'] = $row['user_email'];
+    $result_rows[$key]['phone_no'] = $row['phone_no'];
+    $result_rows[$key]['note'] = $row['note'];
+
+    $db = getDbInstance();
+    $db->where('id', $row['created_by']);
+    $row1 = $db->getOne('tbl_users');
+
+    $result_rows[$key]['created_by'] = $row1['first_name'].' '.$row1['last_name'];
+    $result_rows[$key]['created_date'] = $row['created_date'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -151,7 +167,7 @@ $rows = $db->query($query);
                         <li><a href="javascript:void()"><i class="fa fa-money mr-5"></i>My Balance</a></li>
                         <li><a href="javascript:void()"><i class="fa fa-envelope-open mr-5"></i>Inbox</a></li>
                         <li><a href="javascript:void()"><i class="fa fa-cog mr-5"></i>Account Setting</a></li>
-                        <li><a href="javascript:void()"><i class="fa fa-power-off mr-5"></i>Logout</a></li>
+                        <li><a href="<?php echo BASE_URL;?>logout.php"><i class="fa fa-power-off mr-5"></i>Logout</a></li>
                     </ul>
                 </li>
                 <li class="header nav-small-cap">PERSONAL</li>
@@ -223,7 +239,7 @@ $rows = $db->query($query);
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php foreach ($rows as $row): ?>
+                                    <?php foreach ($result_rows as $row): ?>
                                     <tr>
                                         <td><?php echo htmlspecialchars($row['first_name']); ?></td>
                                         <td><?php echo htmlspecialchars($row['last_name']); ?></td>
@@ -236,8 +252,8 @@ $rows = $db->query($query);
                                             <button type="button" class="btn btn-sm btn-danger-outline" data-target=".user-edit-<?php echo $row['id']; ?>" data-toggle="modal" data-original-title="Edit"><i class="ion-edit" aria-hidden="true"></i></button>
                                             <button type="button" class="btn btn-sm btn-danger-outline" data-target="#confirm-delete-<?php echo $row['id']; ?>" data-toggle="modal" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
                                         </td>
-                                        <?php include BASE_PATH . '/forms/user_del_modal.php';?>
-                                        <?php include BASE_PATH . '/forms/user_edit_modal.php'; ?>
+                                        <?php include BASE_PATH . '/apps/users/forms/user_del_modal.php';?>
+                                        <?php include BASE_PATH . '/apps/users/forms/user_edit_modal.php'; ?>
                                     </tr>
 
                                     <?php endforeach; ?>
@@ -249,7 +265,7 @@ $rows = $db->query($query);
                 </div>
             </div>
             <!-- /.row -->
-            <?php include BASE_PATH . '/forms/user_add_modal.php'; ?>
+            <?php include BASE_PATH . '/apps/users/forms/user_add_modal.php'; ?>
         </section>
         <!-- /.content -->
     </div>

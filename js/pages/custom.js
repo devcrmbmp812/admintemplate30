@@ -14,6 +14,21 @@ $(function () {
             $('#edit_message').html('Not Matching').css('color', 'red');
     });
 
+    $('.add-new-user').click(function (e) {
+        e.preventDefault();
+        console.log($('#message').html());
+        if($('#message').html() == 'Matching') {
+            $('.user-add-modal form').submit();
+        }
+    });
+
+    // $('.edit-user').click(function (e) {
+    //     e.preventDefault();
+    //     if($('#edit_message').html() == 'Matching') {
+    //         $('.user-edit-modal form').submit();
+    //     }
+    // });
+
     $('.edit').click(function () {
         var id = $(this).attr('id').substring(5);
 

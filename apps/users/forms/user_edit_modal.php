@@ -43,7 +43,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success pull-right">Update</button>
+                        <button type="submit" class="btn btn-success pull-right edit-user">Update</button>
                     </div>
                 </form>
             </div>

@@ -33,7 +33,7 @@
 <!--                        </div>-->
                         <div class="form-group">
                             <label>Phone No:</label>
-                            <input type="tel" name="phone_no" class="form-control" placeholder="Phone number" required>
+                            <input type="tel" name="phone_no" class="form-control" placeholder="Phone number">
                         </div>
                         <div class="form-group">
                             <label>Note:</label>

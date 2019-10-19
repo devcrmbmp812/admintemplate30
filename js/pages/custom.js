@@ -16,8 +16,19 @@ $(function () {
 
     $('.add-new-user').click(function (e) {
         console.log($('#message').html());
-        if($('#message').html() == 'Matching') {
-            $('.user-add-modal form').submit();
+        if($('#message').html() == 'Matching' ){
+            if($('input name="first_name"').val() != "" && $('input name="last_name"').val() != "" && $('input name="user_email"').val() != "") {
+                $('.user-add-modal form').submit();
+            } else {
+                if($('input name="first_name"').val() != "") {
+                    $("#.user-add-modal form").validate().element('input name="first_name"');
+                } else if($('input name="last_name"').val() != "") {
+                    $("#.user-add-modal form").validate().element('input name="last_name"');
+                } else if($('input name="user_email"').val() != "") {
+                    $("#.user-add-modal form").validate().element('input name="user_email"');
+                }
+            }
+        } else if($('#message').html() == 'Not Matching'){
             e.preventDefault();
         }
     });

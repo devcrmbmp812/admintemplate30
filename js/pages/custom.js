@@ -16,6 +16,7 @@ $(function () {
 
     $('.edit').click(function () {
         var id = $(this).attr('id').substring(5);
+
         $.ajax({
            url: '/apps/users/ajax_users.php',
             type: "POST",
@@ -26,6 +27,7 @@ $(function () {
             success:function(result){
                console.log(result);
                 var response_json = JSON.parse(result);
+                $('.user-edit-modal').modal('toggle');
                 console.log(response_json.id);
                 $('#edit_id').val(response_json.id);
                 $('.user-edit-modal input[name="first_name"]').val(response_json.first_name);
@@ -36,8 +38,13 @@ $(function () {
                 $('.user-edit-modal input[name="note"]').val(response_json.note);
             }
         });
+    });
+
+    $('.delete').click(function () {
+        var id = $(this).attr('id').substring(7);
+        $('#user-delete-modal').modal('toggle');
+        $('#user-delete-modal #del_id').val(id);
         console.log("id", id);
-        $('.user-edit-modal').modal('toggle');
-        $('.user-edit-modal input[name="first_name"]').val("crmfirstname");
+
     });
 });

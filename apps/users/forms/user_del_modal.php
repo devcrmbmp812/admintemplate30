@@ -1,4 +1,4 @@
-<div class="modal center-modal fade" id="confirm-delete-<?php echo $row['id']; ?>" tabindex="-1">
+<div class="modal center-modal fade" id="user-delete-modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form action="" method="POST">
                     <!-- Modal content -->
-                    <input type="hidden" name="del_id" id="del_id" value="<?php echo $row['id']; ?>">
+                    <input type="hidden" name="del_id" id="del_id">
                     <p>Are you sure you want to delete this row?</p>
                     <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">No</button>
                     <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">Yes</button>

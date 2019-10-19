@@ -10,45 +10,60 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         unset($data_to_db['add_user']);
 
-        // Insert user and timestamp
-        $data_to_db['created_by'] = $_SESSION['user_id'];
-        $data_to_db['password'] = password_hash($data_to_db['password'], PASSWORD_DEFAULT);
-        $data_to_db['created_date'] = date('Y-m-d');
-        unset($data_to_db['confirm_password']);
-
+        // Check whether the user name already exists
         $db = getDbInstance();
-        $last_id = $db->insert('tbl_users', $data_to_db);
+        $db->where('user_email', $data_to_db['user_email']);
+        $db->get('tbl_users');
 
-        if ($last_id)
+        if ($db->count >= 1)
         {
-            $_SESSION['success'] = 'User added successfully!';
+            $_SESSION['failure'] = 'User already exists';
+        } else {
+            // Insert user and timestamp
+            $data_to_db['created_by'] = $_SESSION['user_id'];
+            $data_to_db['password'] = password_hash($data_to_db['password'], PASSWORD_DEFAULT);
+            $data_to_db['created_date'] = date('Y-m-d');
+            unset($data_to_db['confirm_password']);
+
+            $db = getDbInstance();
+            $last_id = $db->insert('tbl_users', $data_to_db);
+
+            if ($last_id)
+            {
+                $_SESSION['success'] = 'User added successfully!';
+            }
+            else
+            {
+                echo 'Insert failed: ' . $db->getLastError();
+                $_SESSION['failure'] = 'Insert Failed';
+            }
         }
-        else
-        {
-            echo 'Insert failed: ' . $db->getLastError();
-            $_SESSION['failure'] = 'Insert Failed';
-        }
-    } else if(isset($_POST['edit_user']) && $_POST['edit_user'] == 'edit_user') {
+    } else if(isset($_POST['edit_user']) && isset($_POST['edit_id']) && $_POST['edit_user'] == 'edit_user') {
         // Get input data
         $data_to_db = array_filter($_POST);
-        unset($data_to_db['edit_user']);
-        unset($data_to_db['edit_id']);
 
-        // Insert user and timestamp
-//        $data_to_db['updated_by'] = 1;
-//        $data_to_db['updated_at'] = date('Y-m-d');
-        unset($data_to_db['confirm_password']);
+
+        // Check whether the user name already exists
         $db = getDbInstance();
-        $db->where('id', $_POST['edit_id']);
-        $stat = $db->update('tbl_users', $data_to_db);
+        $db->where('user_email', $data_to_db['user_email']);
+        $db->where('id', $data_to_db['edit_id'], '!=');
+        $row = $db->getOne('tbl_users');
 
-        if ($stat)
+        if (!empty($row['user_email']))
         {
-            $_SESSION['success'] = 'User updated successfully!';
-            // Redirect to the listing page
-//            header('Location: apps/users/app-users.php');
-//            // Important! Don't execute the rest put the exit/die.
-//            exit();
+            $_SESSION['failure'] = 'User already exists';
+        } else {
+            unset($data_to_db['confirm_password']);
+            unset($data_to_db['edit_user']);
+            unset($data_to_db['edit_id']);
+            $db = getDbInstance();
+            $db->where('id', $_POST['edit_id']);
+            $stat = $db->update('tbl_users', $data_to_db);
+
+            if ($stat)
+            {
+                $_SESSION['success'] = 'User updated successfully!';
+            }
         }
     } else if(isset($_POST['del_id']) && $_POST['del_id'] != 0) {
         $db->where('id', $_POST['del_id']);
@@ -250,8 +265,8 @@ foreach ($rows as $key=>$row) {
                                         <td><?php echo htmlspecialchars($row['created_by']); ?></td>
                                         <td><?php echo htmlspecialchars($row['created_date']); ?></td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline edit" id="edit-<?php echo $row['id']; ?>" data-target=".user-edit-modal" data-original-title="Edit"><i class="ion-edit" aria-hidden="true"></i></button>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-target="#confirm-delete-<?php echo $row['id']; ?>" data-toggle="modal" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger-outline edit" id="edit-<?php echo $row['id']; ?>" data-original-title="Edit"><i class="ion-edit" aria-hidden="true"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger-outline delete" id="delete-<?php echo $row['id']; ?>"  data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>

@@ -15,10 +15,10 @@ $(function () {
     });
 
     $('.add-new-user').click(function (e) {
-        e.preventDefault();
         console.log($('#message').html());
         if($('#message').html() == 'Matching') {
             $('.user-add-modal form').submit();
+            e.preventDefault();
         }
     });
 

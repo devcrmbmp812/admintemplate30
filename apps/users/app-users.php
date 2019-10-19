@@ -96,7 +96,7 @@ foreach ($rows as $key=>$row) {
     $row1 = $db->getOne('tbl_users');
 
     $result_rows[$key]['created_by'] = $row1['first_name'].' '.$row1['last_name'];
-    $result_rows[$key]['created_date'] = $row['created_date'];
+    $result_rows[$key]['created_date'] = date("d-m-Y", strtotime($row['created_date']));
 }
 ?>
 <!DOCTYPE html>

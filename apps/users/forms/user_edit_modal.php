@@ -1,4 +1,4 @@
-<div class="modal fade user-edit-<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+<div class="modal fade user-edit-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,27 +8,36 @@
             <div class="modal-body">
                 <form action="" method="POST">
                     <input type="hidden" name="edit_user" value="edit_user">
-                    <input type="hidden" name="edit_id" id="edit_id" value="<?php echo $row['id']; ?>">
+                    <input type="hidden" name="edit_id" id="edit_id">
                     <div class="box-body">
                         <div class="form-group">
                             <label for="example_input_first_name">First Name:</label>
-                            <input type="text" name="first_name" class="form-control" placeholder="Enter first name" value="<?php echo $row['first_name'];?>">
+                            <input type="text" name="first_name" class="form-control" placeholder="Enter first name" required>
                         </div>
                         <div class="form-group">
                             <label for="example_input_last_name">Last Name:</label>
-                            <input type="text" name="last_name" class="form-control" placeholder="Enter last name" value="<?php echo $row['last_name'];?>">
+                            <input type="text" name="last_name" class="form-control" placeholder="Enter last name" required>
                         </div>
                         <div class="form-group">
                             <label>Email address:</label>
-                            <input type="email" name="user_email" class="form-control" placeholder="Enter email" value="<?php echo $row['user_email'];?>">
+                            <input type="email" name="user_email" class="form-control" placeholder="Enter email" required>
                         </div>
+<!--                        <div class="form-group">-->
+<!--                            <label>Password:</label>-->
+<!--                            <input type="password" name="password" id="edit_password" class="form-control" placeholder="Password" required>-->
+<!--                        </div>-->
+<!--                        <div class="form-group">-->
+<!--                            <label>Confirm Password:</label>-->
+<!--                            <input type="password" name="confirm_password" id="edit_confirm_password" class="form-control" placeholder="Confirm Password" required>-->
+<!--                            <span id='edit_message'></span>-->
+<!--                        </div>-->
                         <div class="form-group">
                             <label>Phone No:</label>
-                            <input type="tel" name="phone_no" class="form-control" placeholder="Phone number" value="<?php echo $row['phone_no'];?>">
+                            <input type="tel" name="phone_no" class="form-control" placeholder="Phone number" required>
                         </div>
                         <div class="form-group">
                             <label>Note:</label>
-                            <input type="text" name="note" class="form-control" placeholder="Note" value="<?php echo $row['note'];?>">
+                            <input type="text" name="note" class="form-control" placeholder="Note">
                         </div>
                     </div>
                     <!-- /.box-body -->

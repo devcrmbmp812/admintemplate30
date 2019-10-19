@@ -14,6 +14,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         $data_to_db['created_by'] = $_SESSION['user_id'];
         $data_to_db['password'] = password_hash($data_to_db['password'], PASSWORD_DEFAULT);
         $data_to_db['created_date'] = date('Y-m-d');
+        unset($data_to_db['confirm_password']);
 
         $db = getDbInstance();
         $last_id = $db->insert('tbl_users', $data_to_db);
@@ -36,7 +37,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         // Insert user and timestamp
 //        $data_to_db['updated_by'] = 1;
 //        $data_to_db['updated_at'] = date('Y-m-d');
-
+        unset($data_to_db['confirm_password']);
         $db = getDbInstance();
         $db->where('id', $_POST['edit_id']);
         $stat = $db->update('tbl_users', $data_to_db);
@@ -249,13 +250,10 @@ foreach ($rows as $key=>$row) {
                                         <td><?php echo htmlspecialchars($row['created_by']); ?></td>
                                         <td><?php echo htmlspecialchars($row['created_date']); ?></td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-danger-outline" data-target=".user-edit-<?php echo $row['id']; ?>" data-toggle="modal" data-original-title="Edit"><i class="ion-edit" aria-hidden="true"></i></button>
+                                            <button type="button" class="btn btn-sm btn-danger-outline edit" id="edit-<?php echo $row['id']; ?>" data-target=".user-edit-modal" data-original-title="Edit"><i class="ion-edit" aria-hidden="true"></i></button>
                                             <button type="button" class="btn btn-sm btn-danger-outline" data-target="#confirm-delete-<?php echo $row['id']; ?>" data-toggle="modal" data-original-title="Delete"><i class="ti-trash" aria-hidden="true"></i></button>
                                         </td>
-                                        <?php include BASE_PATH . '/apps/users/forms/user_del_modal.php';?>
-                                        <?php include BASE_PATH . '/apps/users/forms/user_edit_modal.php'; ?>
                                     </tr>
-
                                     <?php endforeach; ?>
                                     </tbody>
                                 </table>
@@ -265,7 +263,9 @@ foreach ($rows as $key=>$row) {
                 </div>
             </div>
             <!-- /.row -->
+            <?php include BASE_PATH . '/apps/users/forms/user_del_modal.php';?>
             <?php include BASE_PATH . '/apps/users/forms/user_add_modal.php'; ?>
+            <?php include BASE_PATH . '/apps/users/forms/user_edit_modal.php'; ?>
         </section>
         <!-- /.content -->
     </div>
@@ -304,6 +304,8 @@ foreach ($rows as $key=>$row) {
 
 <!-- Fab Admin for Data Table -->
 <script src="../../js/pages/data-table.js"></script>
+<!-- custom js -->
+<script src="../../js/pages/custom.js"></script>
 
 
 </body>

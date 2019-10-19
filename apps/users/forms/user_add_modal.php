@@ -11,20 +11,26 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label for="example_input_first_name">First Name:</label>
-                            <input type="text" name="first_name" class="form-control" placeholder="Enter first name">
+                            <input type="text" name="first_name" class="form-control" placeholder="Enter first name" required>
                         </div>
                         <div class="form-group">
                             <label for="example_input_last_name">Last Name:</label>
-                            <input type="text" name="last_name" class="form-control" placeholder="Enter last name">
+                            <input type="text" name="last_name" class="form-control" placeholder="Enter last name" required>
                         </div>
                         <div class="form-group">
                             <label>Email address:</label>
-                            <input type="email" name="user_email" class="form-control" placeholder="Enter email">
+                            <input type="email" name="user_email" class="form-control" placeholder="Enter email" required>
                         </div>
                         <div class="form-group">
                             <label>Password:</label>
-                            <input type="password" name="password" class="form-control" placeholder="Password">
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
                         </div>
+                        <div class="form-group">
+                            <label>Confirm Password:</label>
+                            <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm Password" required>
+                            <span id='message'></span>
+                        </div>
+
                         <div class="form-group">
                             <label>Phone No:</label>
                             <input type="tel" name="phone_no" class="form-control" placeholder="Phone number">
